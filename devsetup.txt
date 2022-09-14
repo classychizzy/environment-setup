@@ -1,0 +1,242 @@
+#THIS SETUP WILL CONTINUALLY BE UPDATED#
+## BASIC ASSUMPTION: Operating System is Ubuntu 20.04 LTS
+
+System Admin Setup
+===================
+1) Install git -   sudo apt install git
+2) Install Emacs - sudo apt install emacs
+3) Install ShellCheck - sudo apt install shellcheck
+4) Install network tools: sudo apt install net-tools
+5) Install unzip:  sudo apt install unzip
+6) Tools: sudo apt install curl wget
+6) ssh-keygen guide: https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys-on-ubuntu-20-04
+
+
+C Setup
+=======
+1) Install basic setup -   sudo apt install build-essential
+2) Install Betty
+	a) Clone the repo to your local machine - git clone https://github.com/holbertonschool/Betty.git
+	b) cd into the Betty directory
+	c) Install the linter -   sudo ./install.sh
+	d) emacs or vim a new file called betty, and copy the script below:
+		#!/bin/bash
+		# Simply a wrapper script to keep you from having to use betty-style
+		# and betty-doc separately on every item.
+		# Originally by Tim Britton (@wintermanc3r), multiargument added by
+		# Larry Madeo (@hillmonkey)
+
+		BIN_PATH="/usr/local/bin"
+		BETTY_STYLE="betty-style"
+		BETTY_DOC="betty-doc"
+
+		if [ "$#" = "0" ]; then
+		    echo "No arguments passed."
+		    exit 1
+		fi
+
+		for argument in "$@" ; do
+		    echo -e "\n========== $argument =========="
+		    ${BIN_PATH}/${BETTY_STYLE} "$argument"
+		    ${BIN_PATH}/${BETTY_DOC} "$argument"
+		done
+	e) Once saved, exit file and change permissions to apply to all users -   chmod a+x betty
+	f) Move the betty file into /bin/ directory or somewhere else in your $PATH with sudo mv betty /bin/
+
+
+3) Setup emacs to use Betty Linter for C - https://sage.hashnode.dev/using-holbertons-betty-linter-for-c-on-emacs
+
+
+Python Setup
+=============
+1) Install Python -	 sudo apt install python3 (this installs Python3. This is the choice)  
+2) Install Pycodestyle - sudo apt install pycodestyle
+3) Install pip -         sudo apt install pip
+4) Install pipx -        sudo apt install pipx  (used for local installs into a project's root directory)
+5) Install venv  -       sudo apt install python3.8-venv  (according to your python version)
+6) Install virtualenv -  sudo python3 -m pip install virtualenv
+7) sudo apt-get install python3-distutils
+8) sudo apt-get install python3-dev
+9) sudo apt install python3-dev build-essential
+10) sudo apt-get install libmysqlclient-dev
+11) sudo apt-get install zlib1g-dev
+12) sudo pip3 install mysqlclient
+13) sudo pip3 install SQLAlchemy
+
+
+
+JavaScript/TypeScript Setup
+============================
+1) Install node version manager
+	- curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+	- source ~/.bashrc
+2) Install a version of node:
+	- nvm install v16.17.0  (Node version manager can do a lot more things. Google its uses.)
+3) package.json inside every main project directory
+	a) npm init (step by step, press enter to skip. OR
+	b) npm init -y (everything default)
+4) for npm
+	a) local dependency - npm i <packageName>  (inside every main project directory, after npm init)
+	b) global dependency - npm install -g <packageName>  (Using <sudo> command with npm is not recommended. Try not to use global dependency)
+	c) dev dependencies - npm install <packageName> --save-dev
+5) create a .gitignore file inside every main project directory that contains </node_modules> to not push the node_modules folder
+6) Packages to install
+	a) local dependency
+		express -    npm install express --save
+		ionic   -    npm i @ionic/cli
+		sequelize -  npm i sequelize
+		AWS SDK -    npm install aws-sdk
+		Dotenv -     npm install dotenv --save
+		bcrypt -     npm install bcrypt
+	b) dev dependency
+		nodemon -  npm install nodemon --save-dev
+		bcrypt -   npm install @types/bcrypt --save-dev  **
+		mocha -    npm install mocha --save-dev
+		chai -     npm install chai --save-dev
+		typescript -   npm install typescript --save-dev
+			       npm install ts-node --save-dev
+			       npm install @types/node --save-dev
+			       
+			      
+learning resource: John Smilga's repo ( git clone https://github.com/john-smilga/node-express-course.git )
+
+
+MySQL Setup
+============
+1) sudo apt update
+2) sudo apt install mysql-server
+3) sudo systemctl start mysql.service
+4) sudo mysql
+5) mysql> ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'your_password';
+6) mysql> exit
+7) sudo mysql_secure_installation
+NB:
+==
+This will take you through a series of prompts where you can make some changes to your MySQL installation’s security options. The first prompt will ask whether you’d like to set up the Validate Password Plugin, which can be used to test the password strength of new MySQL users before deeming them valid. If you elect to set up the Validate Password Plugin, any MySQL user you create that authenticates with a password will be required to have a password that satisfies the policy you select.
+After selecting your password, From there, you can press Y and then ENTER to accept the defaults for all the subsequent questions. This will remove some anonymous users and the test database, disable remote root logins, and load these new rules so that MySQL immediately respects the changes you have made.
+
+8) mysql -u root -p
+9) mysql> ALTER USER 'root'@'localhost' IDENTIFIED WITH auth_socket;
+10) mysql> exit
+11) sudo mysql
+12) mysql> CREATE USER 'codart'@'localhost' IDENTIFIED BY 'whatever_password_you_want';
+13) mysql> GRANT ALL PRIVILEGES ON *.* TO 'codart'@'localhost';
+16) mysql> FLUSH PRIVILEGES;
+17) mysql> exit
+Test
+====
+Login-  mysql -u <username> -p
+It will prompt you for your password.
+Then exit-  mysql> exit
+
+Check- sudo mysqladmin -p -u <username> version
+
+Reference -   https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-20-04
+Install workbench:   sudo snap install mysql-workbench-community
+
+To uninstall mysql comletely, refer -  https://askubuntu.com/questions/640899/how-do-i-uninstall-mysql-completely
+Again, READ ALL THIS GUIDE AND THE REFERENCES CAREFULLY BEFORE DOING ANYTHING
+
+
+
+PostgreSQL SETUP
+=================
+1) sudo apt install postgresql-common
+2) sudo sh /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh
+3) sudo apt install postgresql-14
+
+
+
+Docker Setup
+=============
+Install Reference:
+https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-20-04
+https://docs.docker.com/desktop/install/ubuntu/
+NB: resolve the dependencies like "qemu-system-x86" and set up "pass"
+
+Important Docker Commands
+- docker context list [use] (to see which docker system you are using)
+- docker ps {-a}     (to see all docker processes)
+- docker build -t <image_name> .  (build an image)
+- docker images   (to see your images)
+- docker login --username=<dockerhub_username>  (optional: to login to dockerhub if you have not already done so)
+- docker tag <image_name>:<image_tag> <dockerhub_username>/<dockerhub_repo_name>:<image_name>    (to tag an image to be pushed)
+- docker push <dockerhub_username>/<dockerhub_repo_name>:<image_name>     (to push docker image)
+(Google "docker login" for how to login to dockerhub from the cli and refer to
+
+
+
+Minikube Setup
+===============
+Prerequisite: Fully functional Docker installation
+Installation:
+	- curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube_latest_amd64.deb
+	- sudo dpkg -i minikube_latest_amd64.deb
+
+Reference: https://minikube.sigs.k8s.io/docs/start/
+
+
+
+Amazon Web Services
+====================
+A -- INSTALL AWS CLI TOOL
+1) curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+2) unzip awscliv2.zip
+3) sudo ./aws/install
+
+Configuration and setup
+1) setup:  aws configure
+NOTE:
+	a) prefered output format is json
+	b) default profile name is default
+	c) if you already have a default profile (an existing profile) setting up new profiles is done as: aws configure --profile <profile-name>
+2) confirm setup:
+	aws configure list 
+	aws configure list-profiles
+3) protect sensitive information
+	export AWS_CONFIG_FILE=~/.aws/config
+	export AWS_SHARED_CREDENTIALS_FILE=~/.aws/credentials
+4) Testing setup
+	# If you've just one profile set locally
+	aws iam list-users
+	# If you've multiple profiles set locally
+	aws iam list-users --profile <profile-name>
+
+NB: Updating specific variable configuration is done via the following syntax
+# Syntax
+# aws configure set <varname> <value> [--profile profile-name]
+# For example
+aws configure set default.region us-east-2
+
+B -- INSTALL AWS EB CLI TOOL
+Ensure you have the following installed - git, python3 and virtualenv (instructions to get these were described)
+1) Clone the repo - git clone https://github.com/aws/aws-elastic-beanstalk-cli-setup.git
+2) Install/Upgrade - python3 ./aws-elastic-beanstalk-cli-setup/scripts/ebcli_installer.py
+3) Move to path  - sudo echo 'export PATH="~/.ebcli-virtual-env/executables:$PATH"' >> ~/.bash_profile && source ~/.bash_profile     (the prompt will give more direction on this final step)
+4) Use pip to get the EB CLI - pip install awsebcli --upgrade
+			       pip install awsebcli --upgrade --user
+5) Verify the install - eb --version
+6) Usage:
+	- eb init      (in project root directory to setup the eb configuration)
+	- eb create    ( when you're ready to deploy)
+
+Reference - https://github.com/aws/aws-elastic-beanstalk-cli-setup
+	    https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/eb-cli3-install-linux.html
+
+# Installation for AWS SDK for JavaScript is referenced in the JavaScript/TypeScript section
+Reference - https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/installing-jssdk.html
+
+
+Other Resources
+================
+- Install Postbird :- sudo snap install postbird
+- Install Postman :- sudo snap install postman
+- Use Sentry for bug reporting :- https://sentry.io/
+- Use Siege for concurrency testing :- https://www.joedog.org/siege-manual/
+- Use Cloudflare and Datadog (AWS CloudWatch is an alternative)
+
+
+Dev Resources
+=============
+a) https://developer.mozilla.org/en-US/
+b) https://www.digitalocean.com/community/tutorials
