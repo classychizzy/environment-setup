@@ -226,7 +226,145 @@ Reference - https://github.com/aws/aws-elastic-beanstalk-cli-setup
 # Installation for AWS SDK for JavaScript is referenced in the JavaScript/TypeScript section
 Reference - https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/installing-jssdk.html
 
+#How to find ssh folder on ubuntu
+-6
 
+Check here for the .ssh directory in here /home/your-username/.ssh.
+
+Its hidden as a result of the dot(.) before the name.
+
+So to find it do ls -a | grep .ssh in your current location as seen in the image. Also try using nautilus
+
+Puppet Setup
+=============
+Install Pupppet:
+	- sudo apt-get install -y ruby
+	- sudo apt-get install -y ruby-augeas
+	- sudo apt-get install -y ruby-shadow
+	- sudo apt-get install -y puppet
+	- sudo apt -y install puppet-module-puppetlabs-stdlib
+	
+Install puppet-lint: sudo gem install puppet-lint
+
+Emacs puppet-mode: M-x package-install RET puppet-mode
+
+
+Nginx
+======
+learning resource: https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-20-04
+
+sudo apt-get update
+sudo apt-get install nginx (NB: apt-get -y should be used in a script to aid
+access without a prompt to install)
+(ufw needs to be configured carefully do not do this in a script)
+sudo ufw app list
+sudo ufw allow 'Nginx HTTP'
+sudo ufw status (checks if nginx is active)
+sudo ufw enable
+sudo ufw allow openSSH
+#NB: openssh allows access to a vagrant machine since it uses a different port (22) from nginx which is port 80
+sudo service nginx status / sudo systemctl status nginx
+curl -4 icanhazip.com 
+NB: this command gives the public ip address of the server
+curl localhost
+NB: gives a html response
+sudo systemctl stop nginx
+cd /etc/nginx/sites-available
+sudo cp default default.bak (create a backup for custom nginx)
+NB: backup is necessary to save default configuration
+other commands
+printf %s "server {
+	listen 80 default_server;
+	listen [::] 80 default_server;
+	root /var/www/html;
+	index index.html index.htm;
+	
+	error_page 404 /404.hmtl;
+	location /404 {
+		root/var/www/html;
+		internal;
+	}
+}
+" >/etc/nginx/sites-available/default
+(this configures the server block for the default page)
+ sudo service nginx restart
+(sudo might be omitted in the script for the commands if you're using sudo to run the script)
+	
+sudo reload (used after making configuration changes)
+/etc/nginx (check for default configuration)
+var/www/html
+echo "Hello World" > /var/www/index.html
+echo "Resource not available" > /var/www/html/404.html
+
+how to configure nginx / Set Up Nginx Server Blocks (Virtual Hosts)
+===================================================================
+Resources: https://www.digitalocean.com/community/tutorials/how-to-set-up-nginx-server-blocks-virtual-hosts
+
+sudo mkdir -p /var/www/example.com/html
+sudo chown -R $USER:$USER /var/www/example.com/html
+sudo chmod -R 755 /var/www/example.com/html
+sudo vi /var/www/example.com/html/index.html
+sudo  vi /etc/nginx/sites-available/example.com
+(create the server block)
+server {
+        listen 80;
+        listen [::] 80;
+        root /var/www/example.com/html;
+        index index.html index.htm index.nginx-debian.html;
+
+	server_name example.com www.example.com
+        
+        location / {
+                try_files $url $url/ =404;
+        }
+}
+
+(create a soft copy of the server block i.e a soft link)
+sudo ln -s /etc/nginx/sites-available/example.com /etc/nginx/sites-enabled/
+NB: if you're hosting multiple websites, memory issues might come up so we need to edit the nginx configuration file by uncommenting
+'server_names_hash_bucket_size 64;' i.e remove #
+
+sudo nginx -t (checks if there's a syntax error in the config file)
+sudo nginx reload
+
+how to create a sample page in nginx
+====================================
+vi /var/www/example.com/html/index.html
+inside the file create a html document
+
+Fabric
+=======
+[The below is to be saved in a file and executed]
+#!/usr/bin/env bash
+#Install nginx on a server and start it
+sudo apt-get update -y
+sudo apt-get upgrade -y
+sudo apt-get autoremove && sudo apt-get autoclean
+sudo pip3 uninstall Fabric
+sudo apt install python3-testresources
+sudo apt-get install libffi-dev
+sudo apt-get install libssl-dev
+sudo apt-get install build-essential
+sudo apt-get install python3.4-dev
+sudo apt-get install libpython3-dev
+sudo pip3 install pyparsing
+sudo pip3 install appdirs
+sudo pip3 install setuptools==40.1.0
+sudo pip3 install cryptography==2.8
+sudo pip3 install bcrypt==3.1.7
+sudo pip3 install PyNaCl==1.3.0
+sudo pip3 install Fabric3==1.14.post1
+
+
+Haproxy installation
+====================
+
+certbot installation
+====================
+
+
+creating an ssl certificate with certbot
+========================================
 Other Resources
 ================
 - Install Postbird :- sudo snap install postbird
