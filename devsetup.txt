@@ -131,6 +131,15 @@ Then exit-  mysql> exit
 
 Check- sudo mysqladmin -p -u <username> version
 
+to change password validation settings i.e Error 1819
+======================================================
+https://www.tecmint.com/fix-mysql-error-1819-hy000/
+ SHOW VARIABLES LIKE 'validate_password%' - shows password validation plugin settings
+mysql> SET GLOBAL validate_password_policy=LOW;
+OR
+mysql> SET GLOBAL validate_password_policy=0; 
+this changes the password strength to low
+
 Reference -   https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-20-04
 Install workbench:   sudo snap install mysql-workbench-community
 
@@ -361,10 +370,26 @@ Haproxy installation
 
 certbot installation
 ====================
+sudo snap install core; sudo snap refresh core - installs snap recommended package for certbot installation
+
+sudo apt remove certbot - ensures that older versions of certbot are destroyed if present
+
+sudo snap install --classic certbot - link certbot from snap to your systems path
+
+sudo ufw allow 443 - allows the firewall to accept traffic from certbot recommended port
 
 
 creating an ssl certificate with certbot
 ========================================
+sudo certbot certonly --standalone -d your_domain
+https://www.digitalocean.com/community/tutorials/how-to-use-certbot-standalone-mode-to-retrieve-let-s-encrypt-ssl-certificates-on-ubuntu-20-04
+
+how to delete a certbot certificate
+===================================
+certbot certificates - shows list of certbot certificates
+
+sudo certbot delete --cert-name example.com - deletes the certificate by domain name
+
 Other Resources
 ================
 - Install Postbird :- sudo snap install postbird
