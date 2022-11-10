@@ -398,7 +398,31 @@ Other Resources
 - Use Siege for concurrency testing :- https://www.joedog.org/siege-manual/
 - Use Cloudflare and Datadog (AWS CloudWatch is an alternative)
 
+How to view webpages hosted on vagrant on your web browser
+===========================================================
+from your computer go to gitbash and cd into the directory where you have your vagrant file. open the vagrant file and look for the line where you have
+```
+Vagrant.configure(2) do |config|
+  # Set up with a Public network
+  config.vm.network :public_network
+```
+uncomment the line with:
+```
+config.vm.network :public_network
+```
+if you want to it accessible on any device other than your computer.
+but if you want it only accesible on your computer you can look for the line
+```
+Vagrant.configure("2") do |config|
+  config.vm.network "private_network", ip: "192.168.50.4"
+```
+and uncomment the line with private_network.
 
+how to add make an ip address visible on django
+===============================================
+go to folder where you have your django app present. cd into the project directory and then open the file settings.py, in the file look for the line that has the setting:
+ALLOWED_HOSTS = ["192.168.60.92"]
+and update with the ip address as shown above
 Dev Resources
 =============
 a) https://developer.mozilla.org/en-US/
