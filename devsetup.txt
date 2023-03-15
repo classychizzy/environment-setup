@@ -427,3 +427,6 @@ Dev Resources
 =============
 a) https://developer.mozilla.org/en-US/
 b) https://www.digitalocean.com/community/tutorials
+how to fix home brew permission denied
+======================================
+sudo chown -R $(whoami) $(brew --prefix)/*
